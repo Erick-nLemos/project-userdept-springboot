@@ -53,4 +53,14 @@ public class DeptController {
         BeanUtils.copyProperties(deptRecordDto, deptModel);
         return ResponseEntity.status(HttpStatus.OK).body(deptRepository.save(deptModel));
     }
+
+    @DeleteMapping("/departments/{idDept}")
+    public ResponseEntity<Object> deleteDept(@PathVariable UUID idDept){
+        Optional<DepartmentModel> deptOpt = deptRepository.findById(idDept);
+        if (deptOpt.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department not Found.");
+        }
+        deptRepository.delete(deptOpt.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Department Deleted Successfully.");
+    }
 }
