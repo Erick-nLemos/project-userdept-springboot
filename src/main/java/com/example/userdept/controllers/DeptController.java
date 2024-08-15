@@ -43,4 +43,14 @@ public class DeptController {
         return ResponseEntity.status(HttpStatus.OK).body(deptOpt.get());
     }
 
+    @PutMapping("/departments/{idDept}")
+    public ResponseEntity<Object> updateDept(@PathVariable UUID idDept, @RequestBody @Valid DeptRecordDto deptRecordDto){
+        Optional<DepartmentModel> deptOpt = deptRepository.findById(idDept);
+        if (deptOpt.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department not Found");
+        }
+        var deptModel = deptOpt.get();
+        BeanUtils.copyProperties(deptRecordDto, deptModel);
+        return ResponseEntity.status(HttpStatus.OK).body(deptRepository.save(deptModel));
+    }
 }
