@@ -35,7 +35,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(usersList);
     }
 
-
+    @GetMapping("/users/{idUser}")
+    public ResponseEntity<Object> getOne(@PathVariable("idUser") UUID idUser){
+        Optional<UserModel> userOpt = userRepository.findById(idUser);
+        if(userOpt.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not Found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userOpt.get());
+    }
 
     @PutMapping("/users/{idUser}")
     public ResponseEntity<Object> updateUser(@PathVariable UUID idUser, @RequestBody @Valid UserRecordDto userRecordDto) {
