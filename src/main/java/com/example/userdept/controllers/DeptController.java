@@ -9,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class DeptController {
@@ -35,6 +34,13 @@ public class DeptController {
         return ResponseEntity.status(HttpStatus.OK).body(deptList);
     }
 
-
+    @GetMapping("/departments/{idDept}")
+    public ResponseEntity<Object> getOne(@PathVariable("idDept") UUID idDept){
+        Optional<DepartmentModel> deptOpt = deptRepository.findById(idDept);
+        if (deptOpt.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department not Found.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(deptOpt.get());
+    }
 
 }
